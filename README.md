@@ -38,4 +38,15 @@ this example uses the character API with a filter
 
 ```
 
+## Testing the project
+
+``` bash
+# Install nox
+$ pip install nox
+
+# run tests
+$ export THE_ONE_TOKEN="<YourToken>"
+$ nox
+```
+
 [The One API]:  https://the-one-api

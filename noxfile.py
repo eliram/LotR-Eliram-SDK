@@ -20,7 +20,7 @@ def test(session):
         "--cov",
         "theoneapi_sdk",
         "--cov-fail-under",
-        "5",
+        "65",
         "--cov-config",
         "setup.cfg",
         env=env,
