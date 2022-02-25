@@ -37,7 +37,7 @@ class RequestHandler:
 
         try:
             if method.lower() == "get":
-                response = self.session.get(f"{self.api_url}{endpoint}{self._build_params(params)}&{get_filters_string(filters)}", headers=self._get_headers(), params=data)
+                response = self.session.get(f"{self.api_url}{endpoint}{self._build_params(params)}{get_filters_string(filters)}", headers=self._get_headers(), params=data)
             elif method.lower() == "post":
                 response = self.session.post(f"{self.api_url}{endpoint}", headers=self._get_headers(), json=data)
             elif method.lower() == "put":

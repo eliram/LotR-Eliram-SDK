@@ -51,4 +51,4 @@ def get_filters_string(filters: List[Filter]) -> str:
     if len(filters) == 0:
         return ""
     else:
-        return "&".join([f.get_filter_string() for f in filters])
+        return f"'&'{'&'.join([f.get_filter_string() for f in filters])}"
