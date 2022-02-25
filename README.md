@@ -49,4 +49,16 @@ $ export THE_ONE_TOKEN="<YourToken>"
 $ nox
 ```
 
+
+## Open Issues and Missing Code:
+- Tests tests tests...
+- Dedicated Exceptions
+- Request Timeout and Retry
+- More robust filters and filters validation
+- Get next page easier implementation
+- Docs and auto generated docs
+- Auto increment version on build
+- Support more python versions
+
+
 [The One API]:  https://the-one-api
