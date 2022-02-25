@@ -37,7 +37,7 @@ class RequestHandler:
 
         try:
             if method.lower() == "get":
-                response = self.session.get(f"{self.api_url}{endpoint}{self._build_params(params)}{get_filters_string(filters)}", headers=self._get_headers(), params=data)
+                response = self.session.get(f"{self.api_url}{endpoint}{self._build_params(params, filters)}", headers=self._get_headers(), params=data)
             elif method.lower() == "post":
                 response = self.session.post(f"{self.api_url}{endpoint}", headers=self._get_headers(), json=data)
             elif method.lower() == "put":
@@ -61,8 +61,13 @@ class RequestHandler:
         """Make a GET request to the API."""
         return self._request("get", endpoint, data, **kwargs)
 
-    def _build_params(self, params: Dict[str, str] = {}) -> str:
+    def _build_params(self, params: Dict[str, str] = {}, filters: List["Filter"] = []) -> str:
         """Build the params for the request."""
-        if not params:
-            return ""
-        return "?" + "&".join([f"{key}={value}" for key, value in params.items()])
+        attributes = ""
+        if params or filters:
+            attributes = "?"
+        if params:
+            attributes =  "&".join([f"{key}={value}" for key, value in params.items()])
+        if filters:
+            attributes += "&" + get_filters_string(filters)
+        return attributes

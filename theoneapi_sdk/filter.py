@@ -17,9 +17,9 @@ class Filter:
     def get_filter_string(self) -> str:
         """Get filter string."""
         if self.type == FilterType.MATCH:
-            return f"{self.field}='{self.value}'"
+            return f"{self.field}={self.value}"
         elif self.type == FilterType.NOT_MATCH:
-            return f"{self.field}!='{self.value}'"
+            return f"{self.field}!={self.value}"
         elif self.type == FilterType.EXISTS:
             return f"{self.field}"
         elif self.type == FilterType.NOT_EXISTS:
@@ -51,4 +51,4 @@ def get_filters_string(filters: List[Filter]) -> str:
     if len(filters) == 0:
         return ""
     else:
-        return f"'&'{'&'.join([f.get_filter_string() for f in filters])}"
+        return "&".join([f.get_filter_string() for f in filters])
