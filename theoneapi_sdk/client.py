@@ -2,6 +2,9 @@
 
 from theoneapi_sdk.request_handler import RequestHandler
 from theoneapi_sdk.book.book import Book
+from theoneapi_sdk.quote.quote import Quote
+from theoneapi_sdk.movie.movie import Movie
+from theoneapi_sdk.character.character import Character
 
 
 _DEFUALT_URL: str = "https://the-one-api.dev/v2/"
@@ -20,8 +23,29 @@ class Client:
         self.api_url = api_url
         request_handler = RequestHandler(self.api_url, self.token)
         self._books_api = Book(request_handler)
+        self._quotes_api = Quote(request_handler)
+        self._movies_api = Movie(request_handler)
+        self._characters_api = Character(request_handler)
 
     @property
     def book(self) -> "Book":
         """Provides access to the Books API."""
         return self._books_api
+
+
+    @property
+    def quote(self) -> "Quote":
+        """Provides access to the Quotes API."""
+        return self._quotes_api
+
+    @property
+    def movie(self) -> "Movie":
+        """Provides access to the Movies API."""
+        return self._movies_api
+
+    @property
+    def character(self) -> "Character":
+        """Provides access to the Characters API."""
+        return self._characters_api
+
+    

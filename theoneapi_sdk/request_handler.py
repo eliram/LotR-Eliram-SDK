@@ -1,7 +1,11 @@
 """Handle the request to the OneAPI server."""
 
-from typing import Dict
+from typing import Dict, List, TYPE_CHECKING
 import requests
+from theoneapi_sdk.filter import get_filters_string
+
+if TYPE_CHECKING:
+    from theoneapi_sdk.filter import Filter
 
 class RequestHandler:
     """Handle the request to the OneAPI server."""
@@ -21,7 +25,7 @@ class RequestHandler:
         }
         return headers
 
-    def _request(self, method: str = "", endpoint: str = "", params: Dict[str,str] = {}, data: Dict[str, str] = None) -> Dict[str, str]:
+    def _request(self, method: str = "", endpoint: str = "", params: Dict[str,str] = {}, filters: List["Filter"] = [], data: Dict[str, str] = None) -> Dict[str, str]:
         """Make a request to the API."""
 
         if data is None:
@@ -33,7 +37,7 @@ class RequestHandler:
 
         try:
             if method.lower() == "get":
-                response = self.session.get(f"{self.api_url}{endpoint}{self._build_params(params)}", headers=self._get_headers(), params=data)
+                response = self.session.get(f"{self.api_url}{endpoint}{self._build_params(params)}&{get_filters_string(filters)}", headers=self._get_headers(), params=data)
             elif method.lower() == "post":
                 response = self.session.post(f"{self.api_url}{endpoint}", headers=self._get_headers(), json=data)
             elif method.lower() == "put":
@@ -42,16 +46,20 @@ class RequestHandler:
                 response = self.session.delete(f"{self.api_url}{endpoint}", headers=self._get_headers(), json=data)
             else:
                 raise ValueError("Method is not supported.")
-            return response.json()
+
+            if response.status_code == 200:
+                return response.json()
+            else:
+                raise ValueError(f"Request failed with status code {response.status_code}")
         #TODO eliram: move to own package error and exception
         except requests.exceptions.Timeout:
             raise ValueError("Request timed out.")
         except Exception as e:
             raise e
 
-    def _get(self, endpoint: str = "", data: Dict[str, str] = {}) -> Dict[str, str]:
+    def _get(self, endpoint: str = "", data: Dict[str, str] = {}, **kwargs ) -> Dict[str, str]:
         """Make a GET request to the API."""
-        return self._request("get", endpoint, data)
+        return self._request("get", endpoint, data, **kwargs)
 
     def _build_params(self, params: Dict[str, str] = {}) -> str:
         """Build the params for the request."""
